@@ -1,0 +1,132 @@
+$ git config --global user.name "yige huang"
+$ git config --global user.email "yph5211@psu.edu"
+$ cd ~/thesis
+$ ls
+analyze.R clean.py process.sh
+$ git init
+Initialized empty Git repository in ~/thesis/.git/
+$ git status
+
+On branch master
+
+Initial commit
+
+Untracked files:
+
+    (use "git add <file>…" to include in what will be committed)
+
+        analyze.R
+
+        clean.py
+
+        process.sh
+
+nothing added to commit but untracked files present (use "git add" to track)
+$ git status
+
+On branch master
+
+Initial commit
+
+Changes to be committed:
+
+    (use "git rm --cached <file>…" to unstage)
+
+        new file: process.sh
+
+Untracked files:
+
+    (use "git add <file>…" to include in what will be committed)
+
+        analyze.R
+
+        clean.py
+        $ git add clean.py analyze.R
+
+$ git commit -m "Add initial version of thesis code."
+
+[master (root-commit) 660213b] Add initial version of thesis code.
+
+3 files changed, 154 insertions(+)
+
+create mode 100644 analyze.R
+
+create mode 100644 clean.py
+
+create mode 100644 process.sh
+$ git log
+
+commit 660213b91af167d992885e45ab19f585f02d4661
+
+Author: First Last <user@domain>
+
+Date: Fri Aug 21 14:52:05 2015–0500
+
+    Add initial version of thesis code.
+    $ tail clean.py
+
+# Filter based on fold-change over control sample
+
+fc_cutoff = 10
+
+epithelial = epithelial.filter(filter_fold_change, fc = fc_cutoff).saveas()
+
+proximal_tube = proximal_tube.filter(filter_fold_change, fc = fc_cutoff).saveas()
+
+kidney = kidney.filter(filter_fold_change, fc = fc_cutoff).saveas()
+
+# Identify only those sites that are peaks in all three tissue types
+
+combined = pybedtools.BedTool().multi_intersect(
+
+    i = [epithelial.fn, proximal_tube.fn, kidney.fn])
+
+union = combined.filter(lambda x: int(x[3]) = = 3).saveas()
+
+union.cut(range(3)).saveas(data + "/sites-union.bed")
+$ git status
+
+# On branch master
+
+# Changes not staged for commit:
+
+#    (use "git add <file>…" to update what will be committed)
+
+#    (use "git checkout --<file>…" to discard changes in working directory)
+
+#
+
+#    modified: clean.py
+
+#
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git diff
+
+diff --git a/clean.py b/clean.py
+
+index 7b8c058.76d84ce 100644
+
+--- a/clean.py
+
++++ b/clean.py
+
+@@ -28,7 +28,7 @@ def filter_fold_change(feature, fc = 1):
+
+    return False
+
+# Filter based on fold-change over control sample
+
+-fc_cutoff = 10
+
++fc_cutoff = 20
+
+epithelial = epithelial.filter(filter_fold_change, fc = fc_cutoff).saveas()
+
+proximal_tube = proximal_tube.filter(filter_fold_change, fc = fc_cutoff).saveas()
+
+kidney = kidney.filter(filter_fold_change, fc = fc_cutoff).saveas()
+$ git checkout -- clean.py
+
+$ git diff
+$ git checkout 660213b clean.py
